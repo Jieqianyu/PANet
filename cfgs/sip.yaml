@@ -1,0 +1,43 @@
+DATA_CONFIG:
+    DATASET_NAME: SemanticKitti
+    DATASET_PATH: ./data/sequences
+    DATASET_CONFIG: ./semantic-kitti.yaml
+    DATALOADER:
+        NUM_WORKER: 8
+
+OPTIMIZE:
+    LR: 0.0005
+    MAX_EPOCH: 50
+
+MODEL:
+    NAME: PANet
+    NCLASS: 19
+    LIMS: [[-48, 48], [-48, 48], [-3, 1.8]] # [[-84, 84], [-84, 84], [-36, 6]] #
+    SIZES: [480, 480, 48] #  [840, 840, 420] #
+    SCALES: [0.5, 1]
+    GRID_METERS: [0.2, 0.2, 0.1]
+    OFFSET: 0.5
+    TARGET_SCALE: 1
+    POOLING_SCALE: [0.5, 1, 2, 4, 6, 8, 12]
+    SEM_PRETRAIN: ./weights/kitti_backbone_v2.pth
+
+    PROPOSALS:
+        CLS_VOXEL_SIZES:
+            - [0.3, 0.3, 0.2]
+            - [0.2, 0.2, 0.1]
+            - [0.2, 0.2, 0.1]
+            - [0.4, 0.4, 0.3]
+            - [0.4, 0.4, 0.3]
+            - [0.1, 0.1, 0.1]
+            - [0.2, 0.2, 0.1]
+            - [0.2, 0.2, 0.1]
+        CLS_BANDWIDTH: [1.2, 0.8, 0.8, 1.6, 1.6, 0.4, 0.8, 0.8]
+        CLS_RADIUS: [0.6, 0.4, 0.4, 0.8, 0.8, 0.2, 0.4, 0.4]
+        CHANNELS: 64
+    STAGE: 0
+
+    POST_PROCESSING:
+        MERGE_FUNC: merge_ins_sem
+
+
+
